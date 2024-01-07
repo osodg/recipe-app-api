@@ -1,5 +1,5 @@
 """
-Test for the user API.
+Tests for the user API.
 """
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -66,8 +66,8 @@ class PublicUserApiTests(TestCase):
     ).exists()
     self.assertFalse(user_exists)
 
-  def test_creat_token_for_user(self):
-    """Test generates token for valid credintials."""
+  def test_create_token_for_user(self):
+    """Test generates token for valid credentials."""
     user_details = {
       'name': 'Test Name',
       'email': 'test@example.com',
@@ -77,7 +77,7 @@ class PublicUserApiTests(TestCase):
 
     payload = {
       'email': user_details['email'],
-      'password': user_details['password']
+      'password': user_details['password'],
     }
     res = self.client.post(TOKEN_URL, payload)
 
@@ -85,10 +85,18 @@ class PublicUserApiTests(TestCase):
     self.assertEqual(res.status_code, status.HTTP_200_OK)
 
   def test_create_token_bad_credentials(self):
-    """Test returns error if creditials invalid."""
+    """Test returns error if credentials invalid."""
     create_user(email='test@example.com', password='goodpass')
 
     payload = {'email': 'test@example.com', 'password': 'badpass'}
+    res = self.client.post(TOKEN_URL, payload)
+
+    self.assertNotIn('token', res.data)
+    self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+  def test_create_token_email_not_found(self):
+    """Test error returned if user not found for given email."""
+    payload = {'email': 'test@example.com', 'password': 'pass123'}
     res = self.client.post(TOKEN_URL, payload)
 
     self.assertNotIn('token', res.data)
