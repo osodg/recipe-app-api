@@ -31,7 +31,7 @@ class PublicUserApiTests(TestCase):
       'email': 'test@example.com',
       'password': 'testpass123',
       'name': 'Test Name',
-    }
+      }
     res = self.client.post(CREATE_USER_URL, payload)
 
     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -45,7 +45,7 @@ class PublicUserApiTests(TestCase):
       'email': 'test@example.com',
       'password': 'testpass123',
       'name': 'Test Name',
-    }
+      }
     create_user(**payload)
     res = self.client.post(CREATE_USER_URL, payload)
 
@@ -57,7 +57,7 @@ class PublicUserApiTests(TestCase):
       'email': 'test@example.com',
       'password': 'pw',
       'name': 'Test name',
-    }
+      }
     res = self.client.post(CREATE_USER_URL, payload)
 
     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -72,13 +72,13 @@ class PublicUserApiTests(TestCase):
       'name': 'Test Name',
       'email': 'test@example.com',
       'password': 'test-user-password123',
-    }
+      }
     create_user(**user_details)
 
     payload = {
       'email': user_details['email'],
       'password': user_details['password'],
-    }
+      }
     res = self.client.post(TOKEN_URL, payload)
 
     self.assertIn('token', res.data)
@@ -125,7 +125,7 @@ class PrivateUserApiTests(TestCase):
       email='test@example.com',
       password='testpass123',
       name='Test Name',
-    )
+      )
     self.client = APIClient()
     self.client.force_authenticate(user=self.user)
 
